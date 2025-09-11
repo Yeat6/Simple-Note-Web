@@ -24,6 +24,30 @@
         <div class="notes-container" id="notes-container">
             <!-- Notes will be dynamically added here -->
         </div>
+
+        <div class="popup-overlay" id="popup-overlay">
+            <div class="popup-form">
+                <h2>Create New Note</h2>
+                <form id="note-form" action="../Backend/index.php" method="POST">
+                    <div class="form-group">
+                        <label for="note-title">Title</label>
+                        <input type="text" id="note-title" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="note-content">Content</label>
+                        <input type="text" id="note-content" required>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="save-btn">Create Note</button>
+                        <button type="button" class="cancel-btn">Cancel</button>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
         
 
 
