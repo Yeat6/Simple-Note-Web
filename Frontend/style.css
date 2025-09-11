@@ -69,7 +69,7 @@ nav{
 }
 
 .popup-form{
-    background: #7d7a7a;
+    background: #95E9F4;
     padding: 30px;
     border-radius: 10px;
     width: 90%;
@@ -101,7 +101,7 @@ nav{
     font-size: 16px;
 }
 
-.form-buttons button{
+.form-group button{
     padding: 8px 20px;
     border: none;
     border-radius: 5px;
@@ -111,7 +111,7 @@ nav{
 }
 
 .save-btn{
-    background: #95E9F4;
+    background: #fff;
     color: #000;
 }
 

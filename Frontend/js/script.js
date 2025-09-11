@@ -1,4 +1,4 @@
-const newNoteBtn = document.getElementById('new-note-btn');
+const newNoteBtn = document.getElementById('new-note');
 const popupOverlay = document.getElementById('popup-overlay');
 const cancelBtn = document.getElementById('cancel-btn');
 const noteForm = document.getElementById('note-form');
