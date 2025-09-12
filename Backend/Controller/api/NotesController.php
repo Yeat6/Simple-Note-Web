@@ -1,7 +1,7 @@
 <?php
 namespace Controller\Api;
 
-require_once __DIR__ . './BaseController.php';
+require_once __DIR__ . '/BaseController.php';
 
 class NotesController extends BaseController
 {
@@ -14,9 +14,19 @@ class NotesController extends BaseController
     //GET /notes
     public function index()
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM notes");
-        $notes = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $this->response($notes);
+        try {
+            $stmt = $this->pdo->prepare("SELECT * FROM notes");
+            $stmt->execute();
+            $notes = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+            if (empty($notes)) {
+                $this->response(["debug" => "Query jalan, tapi tabel kosong"]);
+            } else {
+                $this->response($notes);
+            }
+        } catch (\PDOException $e) {
+            $this->response(["error" => $e->getMessage()]);
+        }
     }
 
     //POST /notes

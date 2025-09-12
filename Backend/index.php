@@ -1,7 +1,7 @@
 <?php
 
-require_once __DIR__ . 'inc/bootstrap.php';
-require_once __DIR__ . 'Controller/api/NotesController.php';
+require_once __DIR__ . '/inc/bootstrap.php';
+require_once __DIR__ . '/Controller/Api/NotesController.php';
 
 use Controller\Api\NotesController;
 
@@ -11,7 +11,8 @@ $method = $_SERVER['REQUEST_METHOD'];
 $uri = $_SERVER['REQUEST_URI'];
 $uriParts = explode('/', trim($uri, '/'));
 
-if ($uriparts[0] !== 'notes') {
+// Cek kalau request memang ke /notes
+if ($uriParts[2] === 'notes') { // [0] = "Simple%20Note%20Web", [1] = "Backend", [2] = "notes"
     switch ($method) {
         case 'GET':
             $controller->index();
@@ -23,13 +24,13 @@ if ($uriparts[0] !== 'notes') {
             break;
 
         case 'PUT':
-            $id = $uriParts[1] ?? null;
+            $id = $uriParts[3] ?? null;
             $data = json_decode(file_get_contents('php://input'), true);
             $controller->update($id, $data);
             break;
 
         case 'DELETE':
-            $id = $uriParts[1] ?? null;
+            $id = $uriParts[3] ?? null;
             $controller->delete($id);
             break;
 
@@ -38,5 +39,4 @@ if ($uriparts[0] !== 'notes') {
             header('Content-Type: application/json');
             echo json_encode(['error' => 'Method Not Allowed']);
     }
-
 }
