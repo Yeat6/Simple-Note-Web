@@ -8,5 +8,7 @@ class BaseController
     {
         http_response_code($status);
         header('content-type: application/json');
+        echo json_encode($data);
+        exit;
     }
 }

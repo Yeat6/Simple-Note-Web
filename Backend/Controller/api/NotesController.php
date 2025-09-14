@@ -32,12 +32,16 @@ class NotesController extends BaseController
     //POST /notes
     public function store($data)
     {
-        $stmt = $this->pdo->prepare("INSERT INTO notes (title, note_content, created_at) VALUES (:title, :note_content, NOW())");
-        $stmt->execute([
-            ':title' => $data['title'],
-            ':note_content' => $data['note_content']
-        ]);
-        $this->response(['message' => 'Note created succesfully'], 201);
+        try {
+            $stmt = $this->pdo->prepare("INSERT INTO notes (title, note_content, created_at) VALUES (:title, :note_content, NOW())");
+            $stmt->execute([
+                ':title' => $data['title'],
+                ':note_content' => $data['note_content']
+            ]);
+            $this->response(['message' => 'Note created succesfully'], 201);
+        } catch (\PDOException $e) {
+            $this->response(['error' => $e->getMessage()], 500);
+        }
     }
 
     //PUT /notes/{id}
