@@ -128,7 +128,99 @@ nav{
     display: flex;
 }
 
+.notes-container{
+    padding: 120px 50px 40px;
+    width: 100%;
+    display: flex;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+    align-items: start;
+}
 
+.note-card{
+    background: #95E9F4;
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    transition: transform 0.14s ease, box-shadow 0.14s ease;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.note-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.note-header h3{
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.1;
+    word-break: break-word;
+    margin-right: 8px;
+    flex: 1 1 auto;
+}
+
+.note-body{
+    display: block;
+    color: #333;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-top: 6px;
+}
+
+.note-body small{
+    display: block;
+    margin-top: 10px;
+    color: #666;
+    font-size: 12px;
+}
+
+.note-actions{
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    justify-content: flex-end;
+}
+
+.note-actions button,
+.note-header .toggle-btn{
+    background: transparent;
+    border: 1px solid #ddd;
+    padding: 6px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+}
+
+.edit-btn{
+    background: #fff;
+    color: #111;
+    background-color: #bbb;
+}
+
+.delete-btn{
+    background: #ff6b6b;
+    color: #fff;
+    border-color: #ff6b6b;
+}
+
+.toggle-btn{
+    background: #fff;
+    color: #000;
+    border: none;
+}
+
+.note-card:hover{
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0, 0,0, 0.12);
+}
 
 
 
