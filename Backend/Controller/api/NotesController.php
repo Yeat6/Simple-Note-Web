@@ -64,4 +64,18 @@ class NotesController extends BaseController
         $this->response(['message' => 'Note deleted succesfully']);
     }
 
+    public function show($id)
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM notes WHERE id=?");
+        $stmt->execute([$id]);
+        $note = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        if ($note) {
+            echo json_encode($note);
+        } else {
+            http_response_code('404');
+            echo json_encode(['error' => 'Note not found']);
+        }
+    }
+
 }

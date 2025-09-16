@@ -128,16 +128,28 @@ nav{
     display: flex;
 }
 
+.wrapper {
+  display: flex;
+  justify-content: center;
+  min-height: 100vh; /* biar full tinggi layar */
+}
+
 .notes-container{
     padding: 120px 50px 40px;
-    width: 100%;
-    display: flex;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    width: auto;
+    max-width: 960px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 kolom fix */
     gap: 20px;
-    align-items: start;
+    justify-content: center;
 }
 
 .note-card{
+    width: 100%;
+    max-width: 300px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
     background: #95E9F4;
     border-radius: 10px;
     padding: 16px;
@@ -164,6 +176,12 @@ nav{
     word-break: break-word;
     margin-right: 8px;
     flex: 1 1 auto;
+    white-space: normal;
+}
+
+.note-card p{
+    word-break: break-all;
+    white-space: normal;
 }
 
 .note-body{
@@ -191,7 +209,6 @@ nav{
 .note-actions button,
 .note-header .toggle-btn{
     background: transparent;
-    border: 1px solid #ddd;
     padding: 6px 10px;
     border-radius: 10px;
     cursor: pointer;
@@ -202,13 +219,13 @@ nav{
 .edit-btn{
     background: #fff;
     color: #111;
-    background-color: #bbb;
+    border: none;
 }
 
 .delete-btn{
     background: #ff6b6b;
-    color: #fff;
-    border-color: #ff6b6b;
+    color: #ff6b6b;
+    border: none;
 }
 
 .toggle-btn{

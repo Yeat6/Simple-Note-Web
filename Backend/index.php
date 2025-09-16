@@ -48,8 +48,7 @@ switch ($method) {
         if ($id === null) {
             $controller->index();
         } else {
-            // if you add show($id) later, call it here
-            $controller->index(); // fallback to index for now
+            $controller->show($id);
         }
         break;
 

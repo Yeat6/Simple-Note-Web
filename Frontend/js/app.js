@@ -1,66 +1,74 @@
-
 const note_form = document.getElementById('note-form');
-const notes_container = document.getElementById('notes-container')
+const notes_container = document.getElementById('notes-container');
+const popupOverlay = document.getElementById('popup-overlay');
+const saveBtn = document.getElementById('save-btn');
 const baseUrl = encodeURI('http://localhost/Simple Note Web/Backend/index.php/notes');
 
-note_form.addEventListener('submit', function(e) {
+let editingNoteId = null; // simpan ID note yang lagi diedit
+
+// Handle form submit (Create / Update)
+note_form.addEventListener('submit', async function(e) {
     e.preventDefault();
 
     const title = document.getElementById('note-title').value;
     const note_content = document.getElementById('note-content').value;
 
-    console.log('data send:', {title, note_content});
+    let url = baseUrl;
+    let method = 'POST';
 
-    fetch(baseUrl, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({title, note_content})
-    })
+    if (editingNoteId) {
+        url = `${baseUrl}/${editingNoteId}`;
+        method = 'PUT';
+    }
 
-    .then(async response => {
-        const text = await response.text();
-
-        if (!response.ok){
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        try{
-            return JSON.parse(text);
-        } catch (e){
-            throw new Error('Invalid JSON response from server');
-        }
-    })
-    .then(data => {
-        console.log(data);
-        note_form.reset();
-
-    })
-    .catch(err => console.error(err));
-
-})
-
-async function fetchNotes(){
     try {
-        const res = await fetch(baseUrl, 
-            {method: 'GET', headers: {'Accept': 'application/json'}});
+        const response = await fetch(url, {
+            method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title, note_content })
+        });
+
+        const text = await response.text();
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+        const data = JSON.parse(text);
+        console.log('server response:', data);
+
+        note_form.reset();
+        popupOverlay.classList.remove('active');
+        editingNoteId = null; // reset ke create mode
+        saveBtn.textContent = "Create Note";
+        document.querySelector('.popup-form h2').textContent = "Create New Note";
+
+        fetchNotes();
+    } catch (err) {
+        console.error('Failed to save note:', err);
+    }
+});
+
+// Fetch all notes
+async function fetchNotes() {
+    try {
+        const res = await fetch(baseUrl, { method: 'GET', headers: { 'Accept': 'application/json' } });
         if (!res.ok) throw new Error(`HTTP error ${res.status}`);
         const notes = await res.json();
         renderNotes(notes);
-    } catch (err){
+    } catch (err) {
         console.error('Failed to fetch notes:', err);
-        notes_container.innerHTML = '<p class="error">Failed to load notes</p>'
+        notes_container.innerHTML = '<p class="error">Failed to load notes</p>';
     }
 }
 
-function renderNotes(notes){
+// Render notes
+function renderNotes(notes) {
     notes_container.innerHTML = '';
 
-    if (!Array.isArray(notes) || notes.length === 0){
+    if (!Array.isArray(notes) || notes.length === 0) {
         notes_container.innerHTML = '<p>No notes yet. Create one!</p>';
         return;
-
     }
 
-    notes.forEach(note =>{
+    notes.forEach(note => {
         const card = document.createElement('div');
         card.className = 'note-card hidden';
         card.dataset.id = note.id ?? '';
@@ -111,32 +119,38 @@ function renderNotes(notes){
 
         notes_container.appendChild(card);
 
-        toggleBtn.addEventListener('click', ()=>{
+        // Toggle
+        toggleBtn.addEventListener('click', () => {
             const isHidden = body.style.display === 'none';
             body.style.display = isHidden ? 'block' : 'none';
             toggleBtn.textContent = isHidden ? 'Hide' : 'Show';
-        })
+        });
 
-        editBtn.addEventListener('click', () =>{
-            // TODO implement PUT
-            console.log('Edit note', note.id);
-        })
+        // Edit
+        editBtn.addEventListener('click', () => {
+            document.getElementById('note-title').value = note.title;
+            document.getElementById('note-content').value = note.note_content;
+            editingNoteId = note.id;
 
+            saveBtn.textContent = "Update Note";
+            document.querySelector('.popup-form h2').textContent = "Edit Note";
 
-        // FIXME Not Working delete btn
-        delBtn.addEventListener('click', async () =>{
+            popupOverlay.classList.add('active');
+        });
+
+        // Delete
+        delBtn.addEventListener('click', async () => {
             if (!confirm('Delete this note?')) return;
-            try{
-                const res = await fetch(`${baseUrl}/${note.id}`, {method: 'DELETE'});
-                if(!res.ok) throw new Error(`Delete failed ${res.status}`);
+            try {
+                const res = await fetch(`${baseUrl}/${note.id}`, { method: 'DELETE' });
+                if (!res.ok) throw new Error(`Delete failed ${res.status}`);
                 fetchNotes();
             } catch (err) {
                 console.error('Failed to delete note:', err);
                 alert('Failed to delete note. Check Console');
             }
-        })
-
-    })
+        });
+    });
 }
 
 window.addEventListener('DOMContentLoaded', fetchNotes);
